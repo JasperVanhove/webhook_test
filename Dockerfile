@@ -6,4 +6,4 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT bash -c "python3 main.py"
+ENTRYPOINT ["python3 main.py"]
