@@ -29,12 +29,10 @@ def on_message(ws, message):
 
     message = json.loads(message)
 
-    print(message)
-
-    if message and message['topic'] and message['data']:
+    if message and message.get('topic', False) and message.get('data', False):
         for i in message['data']:
             logging.debug(i)
-    elif message and message['success']:
+    elif message and message.get('success', False):
         logging.info(message)
 
     if ping_start == interval:
