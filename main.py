@@ -8,7 +8,7 @@ interval = 45
 ping_start = 0
 
 def _prepare_channel_data():
-    return {"op": "subscribe", "args": ["klineV2.1.BTCUSD"]}
+    return {"op": "subscribe", "args": ["klineV2.240.BTCUSD"]}
 
 
 def on_open(ws):
@@ -24,6 +24,11 @@ def on_open(ws):
 def on_message(ws, message):
     global interval
     global ping_start
+
+    if message and message['topic'] and message['topic']['data']:
+        for i in message['topic']['data']:
+            if i['confirm']:
+                print(message)
 
     if ping_start == interval:
         ping_start = 0
