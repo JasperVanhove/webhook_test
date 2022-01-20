@@ -1,5 +1,7 @@
 from datetime import datetime
-import websocket, json
+import json
+
+import websocket
 
 socket = "wss://stream.bybit.com/realtime"
 interval = 45

@@ -1,7 +1,10 @@
 FROM python:3.8
 
-COPY requirements.txt .
+WORKDIR /usr/app/
 
-RUN pip install -r requirements.txt
+COPY requirements.txt ./
+COPY main.py ./
 
-ENTRYPOINT ["python3 main.py"]
+RUN pip3 install -r requirements.txt
+
+ENTRYPOINT python3 main.py
