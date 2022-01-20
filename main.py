@@ -1,5 +1,6 @@
 from datetime import datetime
 import json
+import logging
 
 import websocket
 
@@ -12,7 +13,7 @@ def _prepare_channel_data():
 
 
 def on_open(ws):
-    print(f'Start: {datetime.now()}')
+    logging.info(f'Start: {datetime.now()}')
 
     ws.send(json.dumps({'op': 'ping'}))
 
@@ -28,7 +29,7 @@ def on_message(ws, message):
     if message and message['topic'] and message['topic']['data']:
         for i in message['topic']['data']:
             if i['confirm']:
-                print(message)
+                logging.info(message)
 
     if ping_start == interval:
         ping_start = 0
@@ -40,7 +41,7 @@ def on_message(ws, message):
 
 
 def on_close(ws):
-    print(f'End: {datetime.now()}')
+    logging.info(f'End: {datetime.now()}')
 
 ws = websocket.WebSocketApp(socket, on_open=on_open, on_message=on_message, on_close=on_close)
 ws.run_forever()
