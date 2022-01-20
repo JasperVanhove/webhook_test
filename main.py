@@ -1,22 +1,39 @@
 from datetime import datetime
-from binance import ThreadedWebsocketManager
+import websocket, json
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    try:
-        print(f'Start: {datetime.now()}')
-        twm = ThreadedWebsocketManager()
-        # start is required to initialise its internal loop
-        twm.start()
+socket = "wss://stream.bybit.com/realtime"
+interval = 45
+ping_start = 0
 
-        def handle_socket_message(msg):
-            if bool(msg['k']['x']):
-                print(f'Close at: {datetime.now()}')
+def _prepare_channel_data():
+    return {"op": "subscribe", "args": ["klineV2.1.BTCUSD"]}
 
-        twm.start_kline_socket(callback=handle_socket_message, symbol='BTCUSDT', interval='1h')
-    except Exception as e:
-        print(f'End: {datetime.now()}')
-        print(f'{e.message}')
-        print(f'{e.args}')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+def on_open(ws):
+    print(f'Start: {datetime.now()}')
+
+    ws.send(json.dumps({'op': 'ping'}))
+
+    channel_data = _prepare_channel_data()
+
+    ws.send(json.dumps(channel_data))
+
+
+def on_message(ws, message):
+    global interval
+    global ping_start
+
+    if ping_start == interval:
+        ping_start = 0
+        ws.send(json.dumps({'op': 'ping'}))
+    else:
+        ping_start += 1
+
+    print(message)
+
+
+def on_close(ws):
+    print(f'End: {datetime.now()}')
+
+ws = websocket.WebSocketApp(socket, on_open=on_open, on_message=on_message, on_close=on_close)
+ws.run_forever()
