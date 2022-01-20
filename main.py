@@ -8,6 +8,7 @@ socket = "wss://stream.bybit.com/realtime"
 interval = 45
 ping_start = 0
 
+
 def _prepare_channel_data():
     return {"op": "subscribe", "args": ["klineV2.240.BTCUSD"]}
 
@@ -26,10 +27,15 @@ def on_message(ws, message):
     global interval
     global ping_start
 
-    if message and message['topic'] and message['topic']['data']:
-        for i in message['topic']['data']:
-            if i['confirm']:
-                logging.info(message)
+    message = json.loads(message)
+
+    print(message)
+
+    if message and message['topic'] and message['data']:
+        for i in message['data']:
+            logging.debug(i)
+    elif message and message['success']:
+        logging.info(message)
 
     if ping_start == interval:
         ping_start = 0
@@ -37,11 +43,10 @@ def on_message(ws, message):
     else:
         ping_start += 1
 
-    print(message)
-
 
 def on_close(ws):
     logging.info(f'End: {datetime.now()}')
+
 
 ws = websocket.WebSocketApp(socket, on_open=on_open, on_message=on_message, on_close=on_close)
 ws.run_forever()
