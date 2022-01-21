@@ -5,7 +5,7 @@ import logging
 import websocket
 
 socket = "wss://phemex.com/ws"
-interval = 20
+interval = 10
 ping_start = 0
 
 
@@ -18,6 +18,13 @@ def _prepare_channel_data():
             14400
         ]
     }
+
+def _get_ping_payload():
+    return json.dumps({
+        'id': 1234,
+        'method': 'server.ping',
+        'params': []
+    })
 
 def on_open(ws):
     print(f'Start: {datetime.now()}')
@@ -46,19 +53,19 @@ def on_message(ws, message):
     # elif message and message.get('success', False):
     #     logging.info(message)
 
-    if ping_start == interval:
-        ping_start = 0
-        ws.send(json.dumps({
-            "id": 1234,
-            "method": "server.ping",
-            "params": []
-        }))
-    else:
-        ping_start += 1
+    # if ping_start == interval:
+    #     ping_start = 0
+    #     ws.send(json.dumps({
+    #         "id": 1234,
+    #         "method": "server.ping",
+    #         "params": []
+    #     }))
+    # else:
+    #     ping_start += 1
 
 def on_close(ws, test1, test2):
     print(f'End: {datetime.now()}')
     print(test1 + '\n---------------\n' + test2)
 
 ws = websocket.WebSocketApp(socket, on_open=on_open, on_message=on_message, on_close=on_close)
-ws.run_forever()
+ws.run_forever(ping_interval=interval, ping_payload=_get_ping_payload())
