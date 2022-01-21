@@ -29,11 +29,13 @@ def on_message(ws, message):
 
     message = json.loads(message)
 
-    if message and message.get('topic', False) and message.get('data', False):
-        for i in message['data']:
-            logging.debug(i)
-    elif message and message.get('success', False):
-        logging.info(message)
+    logging.info(message)
+
+    # if message and message.get('topic', False) and message.get('data', False):
+    #     for i in message['data']:
+    #         logging.debug(i)
+    # elif message and message.get('success', False):
+    #     logging.info(message)
 
     if ping_start == interval:
         ping_start = 0
@@ -42,8 +44,9 @@ def on_message(ws, message):
         ping_start += 1
 
 
-def on_close(ws):
+def on_close(ws, test1, test2):
     logging.info(f'End: {datetime.now()}')
+    logging.info(test1 + '\n---------------\n' + test2)
 
 
 ws = websocket.WebSocketApp(socket, on_open=on_open, on_message=on_message, on_close=on_close)
