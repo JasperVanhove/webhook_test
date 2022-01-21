@@ -47,22 +47,6 @@ def on_message(ws, message):
 
     print(message)
 
-    # if message and message.get('topic', False) and message.get('data', False):
-    #     for i in message['data']:
-    #         logging.debug(i)
-    # elif message and message.get('success', False):
-    #     logging.info(message)
-
-    # if ping_start == interval:
-    #     ping_start = 0
-    #     ws.send(json.dumps({
-    #         "id": 1234,
-    #         "method": "server.ping",
-    #         "params": []
-    #     }))
-    # else:
-    #     ping_start += 1
-
 def on_close(ws, test1, test2):
     print(f'End: {datetime.now()}')
     print(test1 + '\n---------------\n' + test2)
