@@ -5,7 +5,7 @@ import logging
 import websocket
 
 socket = "wss://phemex.com/ws"
-interval = 45
+interval = 20
 ping_start = 0
 
 
