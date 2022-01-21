@@ -14,7 +14,7 @@ def _prepare_channel_data():
 
 
 def on_open(ws):
-    logging.info(f'Start: {datetime.now()}')
+    print(f'Start: {datetime.now()}')
 
     ws.send(json.dumps({'op': 'ping'}))
 
@@ -29,7 +29,7 @@ def on_message(ws, message):
 
     message = json.loads(message)
 
-    logging.info(message)
+    print(message)
 
     # if message and message.get('topic', False) and message.get('data', False):
     #     for i in message['data']:
@@ -45,8 +45,8 @@ def on_message(ws, message):
 
 
 def on_close(ws, test1, test2):
-    logging.info(f'End: {datetime.now()}')
-    logging.info(test1 + '\n---------------\n' + test2)
+    print(f'End: {datetime.now()}')
+    print(test1 + '\n---------------\n' + test2)
 
 
 ws = websocket.WebSocketApp(socket, on_open=on_open, on_message=on_message, on_close=on_close)
