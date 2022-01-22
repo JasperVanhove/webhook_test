@@ -29,11 +29,7 @@ def _get_ping_payload():
 def on_open(ws):
     print(f'Start: {datetime.now()}')
 
-    ws.send(json.dumps({
-        'id': 1234,
-        'method': 'server.ping',
-        'params': []
-    }))
+    ws.send(_get_ping_payload())
 
     channel_data = _prepare_channel_data()
 
